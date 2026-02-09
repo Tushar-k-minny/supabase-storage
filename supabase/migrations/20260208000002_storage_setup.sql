@@ -1,0 +1,71 @@
+-- =============================================
+-- Learn with Jiji - Storage Bucket Setup
+-- Migration: 002_storage_setup.sql
+-- Created: 2026-02-08
+-- =============================================
+-- 
+-- IMPORTANT: Storage bucket operations must be done via Supabase Dashboard
+-- or using the Supabase Management API, not through SQL migrations.
+-- This file documents the required setup.
+--
+-- =============================================
+-- Storage Bucket: learning-materials
+-- =============================================
+--
+-- Create the bucket via Supabase Dashboard:
+-- 1. Go to Storage section
+-- 2. Click "New bucket"
+-- 3. Name: learning-materials
+-- 4. Public bucket: Yes (for public access to resources)
+--
+-- Or use the Supabase JS client (admin):
+-- const { data, error } = await supabase
+--   .storage
+--   .createBucket('learning-materials', { public: true })
+
+-- =============================================
+-- Storage RLS Policies (configure via Dashboard)
+-- =============================================
+--
+-- These policies must be configured via Supabase Dashboard:
+--
+-- 1. Allow authenticated users to read files:
+--    Name: 'Authenticated users can read learning materials'
+--    Bucket: learning-materials
+--    Operation: SELECT
+--    Definition: auth.role() = 'authenticated'
+--
+-- 2. Allow service role to manage files:
+--    Name: 'Service role can manage learning materials'
+--    Bucket: learning-materials  
+--    Operation: ALL
+--    Definition: auth.role() = 'service_role'
+
+-- =============================================
+-- Sample Files Structure
+-- =============================================
+-- 
+-- learning-materials/
+-- ├── presentations/
+-- │   ├── rag-intro.pptx
+-- │   ├── ml-fundamentals.pptx
+-- │   └── transformers.pptx
+-- └── videos/
+--     ├── rag-tutorial.mp4
+--     ├── neural-networks.mp4
+--     └── llm-apps.mp4
+
+-- =============================================
+-- Upload Sample Files via CLI or Dashboard
+-- =============================================
+--
+-- Using Supabase CLI:
+-- npx supabase storage cp ./samples/rag-intro.pptx storage://learning-materials/presentations/
+-- npx supabase storage cp ./samples/rag-tutorial.mp4 storage://learning-materials/videos/
+--
+-- Or via JavaScript:
+-- const { data, error } = await supabase.storage
+--   .from('learning-materials')
+--   .upload('presentations/rag-intro.pptx', file)
+
+-- No SQL statements to execute - storage must be configured via Dashboard or API
